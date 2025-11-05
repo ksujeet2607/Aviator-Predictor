@@ -1,5 +1,5 @@
 {
-  "name": "crashpredictors",
+  "name": "Frontrunx",
   "version": "3.3.3",
   "description": "SHA family implementation (JS) — library used by Aviator-Predictor for hashing and HMAC operations.",
   "main": "./dist/sha.js",
