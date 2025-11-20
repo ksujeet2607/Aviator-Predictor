@@ -33,8 +33,8 @@ export default class jsSHA {
 
   /**
    * Creates a new SHA hash instance
-   * @param variant The desired SHA variant (SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, 
-   *   SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256, CSHAKE128, CSHAKE256, 
+   * @param variant The desired SHA variant (SHA-1, SHA-224, SHA-256, SHA-384, SHA-512,
+   *   SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256, CSHAKE128, CSHAKE256,
    *   KMAC128, or KMAC256)
    * @param inputFormat The format for input data (TEXT, HEX, B64, BYTES, ARRAYBUFFER, UINT8ARRAY)
    * @param options Additional settings like encoding, number of rounds, or keys
@@ -52,64 +52,83 @@ export default class jsSHA {
   constructor(variant: "KMAC128" | "KMAC256", inputFormat: "TEXT", options: KMACOptionsEncodingType);
   constructor(variant: "KMAC128" | "KMAC256", inputFormat: FormatNoTextType, options: KMACOptionsNoEncodingType);
 
-  // Initializes the appropriate SHA implementation based on the specified variant
+  // Implementation
   constructor(variant: any, inputFormat: any, options?: any) {
-    if (variant === "SHA-1") {
+    // Variant groups for quick membership checks
+    const SHA1_VARIANTS = new Set(["SHA-1"]);
+    const SHA256_VARIANTS = new Set(["SHA-224", "SHA-256"]);
+    const SHA512_VARIANTS = new Set(["SHA-384", "SHA-512"]);
+    const SHA3_VARIANTS = new Set(["SHA3-224", "SHA3-256", "SHA3-384", "SHA3-512"]);
+    const XOF_AND_KMAC_VARIANTS = new Set([
+      "SHAKE128",
+      "SHAKE256",
+      "CSHAKE128",
+      "CSHAKE256",
+      "KMAC128",
+      "KMAC256",
+    ]);
+
+    if (SHA1_VARIANTS.has(variant)) {
       this.shaObj = new jsSHA1(variant, inputFormat, options);
-    } else if (variant === "SHA-224" || variant === "SHA-256") {
-      this.shaObj = new jsSHA256(variant, inputFormat, options);
-    } else if (variant === "SHA-384" || variant === "SHA-512") {
-      this.shaObj = new jsSHA512(variant, inputFormat, options);
-    } else if ([
-      "SHA3-224", "SHA3-256", "SHA3-384", "SHA3-512",
-      "SHAKE128", "SHAKE256", "CSHAKE128", "CSHAKE256",
-      "KMAC128", "KMAC256"
-    ].includes(variant)) {
-      this.shaObj = new jsSHA3(variant, inputFormat, options);
-    } else {
-      throw new Error(sha_variant_error);
+      return;
     }
+
+    if (SHA256_VARIANTS.has(variant)) {
+      this.shaObj = new jsSHA256(variant, inputFormat, options);
+      return;
+    }
+
+    if (SHA512_VARIANTS.has(variant)) {
+      this.shaObj = new jsSHA512(variant, inputFormat, options);
+      return;
+    }
+
+    if (SHA3_VARIANTS.has(variant) || XOF_AND_KMAC_VARIANTS.has(variant)) {
+      // jsSHA3 handles SHA3 family, XOFs (SHAKE/CSHAKE) and KMAC variants
+      this.shaObj = new jsSHA3(variant, inputFormat, options);
+      return;
+    }
+
+    throw new Error(sha_variant_error);
   }
 
   /**
-   * Updates the hash with new input data
-   * @param input The data to hash
-   * @returns This instance for method chaining
+   * Update the internal hash state with more data.
+   * Accepts strings, ArrayBuffer, Uint8Array or any ArrayBufferView.
    */
-  update(input: string | ArrayBuffer | Uint8Array): this {
-    this.shaObj.update(input);
+  update(input: string | ArrayBuffer | Uint8Array | ArrayBufferView): this {
+    // delegate to inner implementation
+    // jsSHA implementations accept the same shapes; if not, they will throw appropriately
+    (this.shaObj as any).update(input);
     return this;
   }
 
-  // Hash output methods
+  // getHash overloads
   getHash(format: "HEX", options?: { outputUpper?: boolean; outputLen?: number; shakeLen?: number }): string;
   getHash(format: "B64", options?: { b64Pad?: string; outputLen?: number; shakeLen?: number }): string;
   getHash(format: "BYTES", options?: { outputLen?: number; shakeLen?: number }): string;
   getHash(format: "UINT8ARRAY", options?: { outputLen?: number; shakeLen?: number }): Uint8Array;
   getHash(format: "ARRAYBUFFER", options?: { outputLen?: number; shakeLen?: number }): ArrayBuffer;
-  
   getHash(format: any, options?: any): any {
-    return this.shaObj.getHash(format, options);
+    return (this.shaObj as any).getHash(format, options);
   }
 
-  // HMAC key configuration
+  // setHMACKey overloads
   setHMACKey(key: string, inputFormat: "TEXT", options?: { encoding?: EncodingType }): void;
   setHMACKey(key: string, inputFormat: "B64" | "HEX" | "BYTES"): void;
   setHMACKey(key: ArrayBuffer, inputFormat: "ARRAYBUFFER"): void;
   setHMACKey(key: Uint8Array, inputFormat: "UINT8ARRAY"): void;
-  
   setHMACKey(key: any, inputFormat: any, options?: any): void {
-    this.shaObj.setHMACKey(key, inputFormat, options);
+    (this.shaObj as any).setHMACKey(key, inputFormat, options);
   }
 
-  // HMAC output methods
+  // getHMAC overloads
   getHMAC(format: "HEX", options?: { outputUpper?: boolean }): string;
   getHMAC(format: "B64", options?: { b64Pad?: string }): string;
   getHMAC(format: "BYTES"): string;
   getHMAC(format: "UINT8ARRAY"): Uint8Array;
   getHMAC(format: "ARRAYBUFFER"): ArrayBuffer;
-  
   getHMAC(format: any, options?: any): any {
-    return this.shaObj.getHMAC(format, options);
+    return (this.shaObj as any).getHMAC(format, options);
   }
 }
