@@ -50,7 +50,19 @@ class User {
         define('SUBTITLE','Web Development');
         $this->render(__FUNCTION__, $response);
     }
-
+    
+    
+ public function ui_xi_design($param){
+        define('SUBTITLE','UI XI Design');
+        $this->render(__FUNCTION__, $response);
+    }
+    
+    public function api_intigration($param){
+        define('SUBTITLE','UI XI Design');
+        $this->render(__FUNCTION__, $response);
+    }
+    
+    
     public function mobile_application($param){
         define('SUBTITLE','Mobile Application');
         $this->render(__FUNCTION__, $response);
